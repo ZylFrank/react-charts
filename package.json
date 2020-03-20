@@ -28,12 +28,6 @@
     "lint:style": "stylelint --fix \"src/**/*.css\" --syntax css",
     "prettier": "prettier -c --write \"**/*\""
   },
-  "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "no-console": 1
-    }
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -46,21 +40,11 @@
       "last 1 safari version"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+  "husky": { "hooks": { "pre-commit": "npm run lint-staged" } },
   "lint-staged": {
-    "src/**/*.{js,jsx,mjs,ts,tsx}": [
-      "node_modules/.bin/prettier --write",
-      "node_modules/.bin/eslint --fix",
-      "git add"
-    ],
-    "src/**/*.{css,scss,less,json,html,md,markdown}": [
-      "node_modules/.bin/prettier --write",
-      "git add"
-    ]
+    "**/*.less": "stylelint --syntax less",
+    "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
+    "**/*.{js,jsx,tsx,ts,css,md,json}": ["prettier --write"]
   },
   "devDependencies": {
     "eslint": "^6.8.0",

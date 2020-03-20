@@ -2,26 +2,54 @@ import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
-
 import CustomIcon from '../../components/CustomIcon';
 
 import { chartRoutes } from '../../routes/config';
 import './style.css';
 
 const { Header, Content, Sider } = Layout;
+const { SubMenu } = Menu;
 
 const BasiceLayout = (props) => {
   const [collapsed, setCollapsed] = useState(false);
-
   const toggle = () => {
     setCollapsed(!collapsed);
   };
 
   const showMenus = chartRoutes.filter((item) => !item.hideInMenu);
-
   const clickMenu = (e) => {
     props.history.push(e.key);
   };
+
+  const formatRoutes = (parentPath,routes) => routes.map((route) => {
+    if (route.hideInMenu || route.redirect) {
+      return null;
+    }
+    if (route.routes && route.routes.length > 0) {
+      return (
+        <SubMenu
+          key={`${parentPath}${route.path}`}
+          title={
+            <span>
+              {route.icon && (<CustomIcon type={route.icon} />)}
+              <span>{route.title}</span>
+            </span>
+          }
+        >
+          {
+            formatRoutes(`${parentPath}${route.path}`, route.routes)
+          }
+        </SubMenu>
+      );
+    } 
+      return (
+        <Menu.Item key={`${parentPath}${route.path}`} onClick={(e) => clickMenu(e)}>
+          {route.icon && (<CustomIcon type={route.icon} />)}
+          <span>{route.title}</span>
+        </Menu.Item>
+      )
+  });
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -40,12 +68,9 @@ const BasiceLayout = (props) => {
           defaultSelectedKeys={[showMenus[0].path || '']}
           selectedKeys={props.location.pathname || ''}
         >
-          {showMenus.map((item) => (
-            <Menu.Item key={item.path} onClick={(e) => clickMenu(e)}>
-              <CustomIcon type={item.icon} />
-              <span>{item.title}</span>
-            </Menu.Item>
-          ))}
+          {
+            formatRoutes('', chartRoutes)
+          }
         </Menu>
       </Sider>
       <Layout className="site-layout">
