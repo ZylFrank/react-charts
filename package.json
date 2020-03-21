@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.0.3",
+    "lodash": "^4.17.15",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
@@ -40,11 +41,18 @@
       "last 1 safari version"
     ]
   },
-  "husky": { "hooks": { "pre-commit": "npm run lint-staged" } },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
+  },
   "lint-staged": {
-    "**/*.less": "stylelint --syntax less",
+    "**/*.css": "stylelint --syntax css",
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
-    "**/*.{js,jsx,tsx,ts,css,md,json}": ["prettier --write"]
+    "**/*.{js,jsx,tsx,ts,css,md,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "devDependencies": {
     "eslint": "^6.8.0",
@@ -60,6 +68,8 @@
     "lint-staged": "^10.0.8",
     "prettier": "^1.19.1",
     "stylelint": "^13.2.1",
-    "stylelint-config-standard": "^20.0.0"
+    "stylelint-config-prettier": "^8.0.1",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-prettier": "^1.1.2"
   }
 }

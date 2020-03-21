@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Bar } from '@antv/g2plot';
 import { Card, Modal, Tooltip } from 'antd';
 import { SettingOutlined, FileImageOutlined } from '@ant-design/icons';
 
 import EditTable from '../../components/EditTable';
+import BarChart from '../../components/Charts';
 
 import './style.css';
 
@@ -31,24 +32,6 @@ function BarChartPage() {
     },
   ];
 
-  useEffect(() => {
-    if (!chartRef.current) {
-      return;
-    }
-    const barPlot = new Bar(chartRef.current, {
-      data,
-      xField: 'value',
-      yField: 'label',
-      colorField: 'label',
-      legend: {
-        visible: true,
-        position: 'bottom-center',
-      },
-    });
-    barPlot.render('canvas');
-    return () => barPlot.destroy();
-  }, [data]);
-
   const tableDataSave = (row) => {
     const { value, ...otherValues } = row;
     const newData = [...data];
@@ -67,11 +50,8 @@ function BarChartPage() {
     setData(newData);
   };
 
-  const showModal = () => {
-    setVisible(true);
-  };
-  const hideModal = () => {
-    setVisible(false);
+  const toggerModal = () => {
+    setVisible(!visible);
   };
 
   const downloadImage = () => {
@@ -93,20 +73,33 @@ function BarChartPage() {
             <FileImageOutlined onClick={downloadImage} />
           </Tooltip>
           <Tooltip placement="bottom" title="配置数据">
-            <SettingOutlined onClick={showModal} />
+            <SettingOutlined onClick={toggerModal} />
           </Tooltip>
         </span>
       }
     >
-      <div ref={chartRef} />
+      <BarChart
+        ref={chartRef}
+        Plot={Bar}
+        data={data}
+        configOptions={{
+          xField: 'value',
+          yField: 'label',
+          colorField: 'label',
+          legend: {
+            visible: true,
+            position: 'bottom-center',
+          },
+        }}
+      />
       <Modal
         width={800}
         title="配置数据"
         visible={visible}
-        onOk={hideModal}
+        onOk={toggerModal}
         okText="确认"
         cancelText="取消"
-        onCancel={hideModal}
+        onCancel={toggerModal}
       >
         <EditTable
           size="small"

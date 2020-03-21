@@ -21,34 +21,33 @@ const BasiceLayout = (props) => {
     props.history.push(e.key);
   };
 
-  const formatRoutes = (parentPath,routes) => routes.map((route) => {
-    if (route.hideInMenu || route.redirect) {
-      return null;
-    }
-    if (route.routes && route.routes.length > 0) {
-      return (
-        <SubMenu
-          key={`${parentPath}${route.path}`}
-          title={
-            <span>
-              {route.icon && (<CustomIcon type={route.icon} />)}
-              <span>{route.title}</span>
-            </span>
-          }
-        >
-          {
-            formatRoutes(`${parentPath}${route.path}`, route.routes)
-          }
-        </SubMenu>
-      );
-    } 
+  const formatRoutes = (parentPath, routes) =>
+    routes.map((route) => {
+      if (route.hideInMenu || route.redirect) {
+        return null;
+      }
+      if (route.routes && route.routes.length > 0) {
+        return (
+          <SubMenu
+            key={`${parentPath}${route.path}`}
+            title={
+              <span>
+                {route.icon && <CustomIcon type={route.icon} />}
+                <span>{route.title}</span>
+              </span>
+            }
+          >
+            {formatRoutes(`${parentPath}${route.path}`, route.routes)}
+          </SubMenu>
+        );
+      }
       return (
         <Menu.Item key={`${parentPath}${route.path}`} onClick={(e) => clickMenu(e)}>
-          {route.icon && (<CustomIcon type={route.icon} />)}
+          {route.icon && <CustomIcon type={route.icon} />}
           <span>{route.title}</span>
         </Menu.Item>
-      )
-  });
+      );
+    });
 
   return (
     <Layout>
@@ -68,9 +67,7 @@ const BasiceLayout = (props) => {
           defaultSelectedKeys={[showMenus[0].path || '']}
           selectedKeys={props.location.pathname || ''}
         >
-          {
-            formatRoutes('', chartRoutes)
-          }
+          {formatRoutes('', chartRoutes)}
         </Menu>
       </Sider>
       <Layout className="site-layout">

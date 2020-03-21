@@ -10,7 +10,7 @@ const AppRouter = () => (
       {commonRoutes.map((route) => (
         <Route key={route.path} {...route} />
       ))}
-      <Redirect path="/" to="/chart/bar" />
+      <Redirect exact from="/" to="/chart" />
       <Redirect to="/404" />
     </Switch>
   </Router>

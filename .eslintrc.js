@@ -64,7 +64,7 @@ module.exports = {
     'no-param-reassign': 1,
     'space-before-function-paren': 0,
     'import/extensions': 0,
-    'import/no-extraneous-dependencies': ["error", {"devDependencies": true}],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'consistent-return': 0,
   },
 };
